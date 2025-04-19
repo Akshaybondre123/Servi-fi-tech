@@ -47,13 +47,13 @@ export default function Clients() {
           </p>
         </motion.div>
 
-        {/* First row of client logos - slower, smoother animation */}
+        {/* Single row of client logos - slower, smoother animation */}
         <div className="relative mb-12 overflow-hidden">
           <motion.div
             initial={{ x: "0%" }}
             animate={{ x: "-33.33%" }}
             transition={{
-              duration: 60, // Much slower animation
+              duration: 120, // Much slower animation (doubled from 60 to 120)
               ease: "linear",
               repeat: Number.POSITIVE_INFINITY,
               repeatType: "loop",
@@ -64,68 +64,28 @@ export default function Clients() {
               <motion.div
                 key={`row1-${index}`}
                 whileHover={{
-                  y: -10,
+                  y: -5, // Reduced hover lift
                   boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
                   borderColor: "#3b82f6",
                 }}
                 transition={{ duration: 0.4 }}
-                className="mx-8 h-32 w-72 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-gray-700 shadow-xl flex items-center justify-center px-8 hover:border-blue-500 transition-all duration-500"
+                className="mx-4 h-20 w-48 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-gray-700 shadow-xl flex items-center justify-center px-4 hover:border-blue-500 transition-all duration-500"
               >
                 <div className="flex items-center">
-                  <div
-                    className={`w-14 h-14 rounded-xl ${client.color} flex items-center justify-center mr-5 shadow-lg`}
-                  >
-                    <span className="text-white font-bold text-2xl">{client.name.charAt(0)}</span>
+                  <div className={`w-8 h-8 rounded-lg ${client.color} flex items-center justify-center mr-3 shadow-lg`}>
+                    <span className="text-white font-bold text-sm">{client.name.charAt(0)}</span>
                   </div>
-                  <span className="text-white font-bold text-2xl">{client.name}</span>
+                  <span className="text-white font-bold text-sm">{client.name}</span>
                 </div>
               </motion.div>
             ))}
           </motion.div>
 
           {/* Static placeholder for spacing */}
-          <div className="h-32"></div>
+          <div className="h-20"></div>
         </div>
 
-        {/* Second row of client logos - moving in opposite direction */}
-        <div className="relative overflow-hidden">
-          <motion.div
-            initial={{ x: "-33.33%" }}
-            animate={{ x: "0%" }}
-            transition={{
-              duration: 60, // Much slower animation
-              ease: "linear",
-              repeat: Number.POSITIVE_INFINITY,
-              repeatType: "loop",
-            }}
-            className="flex absolute"
-          >
-            {tripleClients.map((client, index) => (
-              <motion.div
-                key={`row2-${index}`}
-                whileHover={{
-                  y: -10,
-                  boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
-                  borderColor: "#3b82f6",
-                }}
-                transition={{ duration: 0.4 }}
-                className="mx-8 h-32 w-72 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-gray-700 shadow-xl flex items-center justify-center px-8 hover:border-blue-500 transition-all duration-500"
-              >
-                <div className="flex items-center">
-                  <div
-                    className={`w-14 h-14 rounded-xl ${client.color} flex items-center justify-center mr-5 shadow-lg`}
-                  >
-                    <span className="text-white font-bold text-2xl">{client.name.charAt(0)}</span>
-                  </div>
-                  <span className="text-white font-bold text-2xl">{client.name}</span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Static placeholder for spacing */}
-          <div className="h-32"></div>
-        </div>
+        {/* Remove the second row completely */}
 
         {/* Client testimonials */}
         <motion.div

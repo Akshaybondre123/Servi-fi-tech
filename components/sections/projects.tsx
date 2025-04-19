@@ -17,7 +17,7 @@ const projects = [
       "Expert AI-driven recommendations that help users make informed decisions about health, finances, and relationships.",
     ],
     color: "blue",
-    // image: "/images/projects/kailasa-ai.png",
+    image: "/projects/kailasa-ai.png",
   },
   {
     title: "Insurance AI - Smart Training Solution",
@@ -41,7 +41,7 @@ const projects = [
       "Real-Time Data Access: The integrated database ensures Rotary International can access up-to-date information instantly, supporting faster decisions and better data management across operations.",
     ],
     color: "green",
-    // image: "/images/projects/rotary-qr.png",
+    image: "/projects/rotary-qr.png",
   },
   {
     title: "G2IT Venue Marketing Platform",
@@ -54,7 +54,7 @@ const projects = [
       "The platform provides real-time tracking, enabling clients to measure the effectiveness of campaigns and adjust strategies for better results.",
     ],
     color: "yellow",
-    // image: "/images/projects/g2it-marketing.png",
+    image: "/projects/g2it-marketing.png",
   },
   {
     title: "AI Agent Live Video Support",
@@ -66,7 +66,7 @@ const projects = [
       "Clients benefit from smooth, lag-free video interactions, ensuring consistent support and delivering an overall enhanced user experience.",
     ],
     color: "red",
-    // image: "/images/projects/ai-agent-video.png",
+    // image: "/projects/ai-agent-video.png",
   },
 ]
 

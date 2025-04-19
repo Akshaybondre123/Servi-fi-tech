@@ -170,7 +170,7 @@ function ContactShape() {
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
-        font="public/fonts/Inter-Bold.ttf"
+        // font="public/fonts/Inter-Bold.ttf"
       >
         CONTACT US
       </Text>
