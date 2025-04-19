@@ -3,6 +3,7 @@
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { Globe, Smartphone, Bot, MessageSquare, Wifi, BarChart3 } from "lucide-react"
+import { useState, useEffect } from "react"
 
 const services = [
   {
@@ -48,6 +49,62 @@ const services = [
     color: "from-indigo-600 to-indigo-400",
   },
 ]
+
+interface AnimatedStatProps {
+  value: number
+  suffix?: string
+  label: string
+  isInView: boolean
+}
+
+function AnimatedStat({ value, suffix = "", label, isInView }: AnimatedStatProps) {
+  const [count, setCount] = useState(0)
+  const duration = 10000 // 10 seconds in milliseconds
+  const framesPerSecond = 30
+  const totalFrames = (duration / 1000) * framesPerSecond
+  const increment = value / totalFrames
+
+  useEffect(() => {
+    if (!isInView) {
+      setCount(0)
+      return
+    }
+
+    let currentCount = 0
+    let frame = 0
+
+    const timer = setInterval(() => {
+      frame++
+      currentCount += increment
+
+      if (currentCount >= value || frame >= totalFrames) {
+        clearInterval(timer)
+        setCount(value)
+      } else {
+        setCount(Math.floor(currentCount))
+      }
+    }, 1000 / framesPerSecond)
+
+    return () => clearInterval(timer)
+  }, [isInView, value, increment])
+
+  return (
+    <motion.div
+      whileHover={{
+        y: -10,
+        boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
+      }}
+      transition={{ duration: 0.4 }}
+      className="bg-gray-900 rounded-lg p-6 border border-gray-800"
+    >
+      <h4 className="text-4xl font-bold text-blue-500 mb-2">
+        {count}
+        {suffix}
+      </h4>
+      <p className="text-gray-300">{label}</p>
+    </motion.div>
+  )
+}
 
 export default function Services() {
   const ref = useRef(null)
@@ -155,50 +212,10 @@ export default function Services() {
           }}
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
         >
-          <motion.div
-            whileHover={{
-              y: -10,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
-            }}
-            transition={{ duration: 0.4 }}
-            className="bg-gray-900 rounded-lg p-6 border border-gray-800"
-          >
-            <h4 className="text-4xl font-bold text-blue-500 mb-2">100+</h4>
-            <p className="text-gray-300">Projects Completed</p>
-          </motion.div>
-          <motion.div
-            whileHover={{
-              y: -10,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
-            }}
-            transition={{ duration: 0.4 }}
-            className="bg-gray-900 rounded-lg p-6 border border-gray-800"
-          >
-            <h4 className="text-4xl font-bold text-blue-500 mb-2">50+</h4>
-            <p className="text-gray-300">Happy Clients</p>
-          </motion.div>
-          <motion.div
-            whileHover={{
-              y: -10,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
-            }}
-            transition={{ duration: 0.4 }}
-            className="bg-gray-900 rounded-lg p-6 border border-gray-800"
-          >
-            <h4 className="text-4xl font-bold text-blue-500 mb-2">15+</h4>
-            <p className="text-gray-300">AI Experts</p>
-          </motion.div>
-          <motion.div
-            whileHover={{
-              y: -10,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.2)",
-            }}
-            transition={{ duration: 0.4 }}
-            className="bg-gray-900 rounded-lg p-6 border border-gray-800"
-          >
-            <h4 className="text-4xl font-bold text-blue-500 mb-2">24/7</h4>
-            <p className="text-gray-300">Support Available</p>
-          </motion.div>
+          <AnimatedStat value={100} suffix="+" label="Projects Completed" isInView={isInView} />
+          <AnimatedStat value={50} suffix="+" label="Happy Clients" isInView={isInView} />
+          <AnimatedStat value={15} suffix="+" label="AI Experts" isInView={isInView} />
+          <AnimatedStat value={24} suffix="/7" label="Support Available" isInView={isInView} />
         </motion.div>
       </div>
     </section>

@@ -151,12 +151,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - improved positioning for mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-4 md:bottom-10 left-1/2 transform -translate-x-1/2 z-10"
       >
         <div className="flex flex-col items-center">
           <span className="text-gray-400 text-sm mb-2">Scroll Down</span>

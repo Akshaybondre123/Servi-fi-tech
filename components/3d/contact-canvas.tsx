@@ -58,7 +58,7 @@ function PulsingParticles() {
       const originalDist = dist
 
       // Create flowing wave effect based on position and time
-      const sinOffset = Math.sin(time * 0.3 + dist * 0.5) * 0.1
+      const sinOffset = Math.sin(time * 0.4 + dist * 0.5) * 0.1
 
       // Normalize the position, add the offset, then rescale
       const scale = (originalDist + sinOffset) / originalDist
