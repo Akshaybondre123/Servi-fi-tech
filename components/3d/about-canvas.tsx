@@ -1,23 +1,49 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Environment } from "@react-three/drei"
 import type * as THREE from "three"
 
 function AiRobot(props: any) {
   const robotRef = useRef<THREE.Group>(null)
+  const [centered, setCentered] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCentered(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   useFrame((state) => {
     if (robotRef.current) {
-      // Gentle floating animation
-      robotRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2
-      robotRef.current.rotation.y = state.clock.getElapsedTime() * 0.2
+      // Gentle floating animation - only apply if not centered
+      if (!centered) {
+        robotRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2
+        robotRef.current.rotation.y = state.clock.getElapsedTime() * 0.2
+      } else {
+        // When centered, just rotate slightly
+        robotRef.current.rotation.y = state.clock.getElapsedTime() * 0.5
+      }
     }
   })
 
+  // Calculate position based on centered state
+  const position = centered ? [0, 0, 0] : props.position || [0, 0, 0]
+  const scale = centered ? 1.5 : 1
+
   return (
-    <group ref={robotRef} {...props}>
+    <group
+      ref={robotRef}
+      {...props}
+      position={position}
+      scale={[scale, scale, scale]}
+      userData={{
+        transition: { duration: 1.5, ease: "easeInOut" },
+      }}
+    >
       {/* Robot body */}
       <mesh position={[0, 0, 0]} castShadow>
         <boxGeometry args={[1.5, 2, 1]} />

@@ -19,18 +19,12 @@ const navItems = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
     // Check if window is defined (client-side) before adding event listeners
     if (typeof window !== "undefined") {
       const handleScroll = () => {
         setScrolled(window.scrollY > 10)
-
-        // Calculate scroll progress
-        const totalHeight = document.body.scrollHeight - window.innerHeight
-        const progress = (window.scrollY / totalHeight) * 100
-        setScrollProgress(progress)
       }
 
       // Initial check
@@ -53,10 +47,6 @@ export default function Navigation() {
         scrolled ? "bg-black/80 backdrop-blur-md py-2 shadow-lg" : "bg-transparent py-4",
       )}
     >
-      <div
-        className="absolute bottom-0 left-0 h-1 bg-blue-500 transition-all duration-300 z-50"
-        style={{ width: `${scrollProgress}%` }}
-      ></div>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link href="#home" className="text-white font-bold text-2xl">
           <motion.div

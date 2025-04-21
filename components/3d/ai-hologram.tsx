@@ -68,7 +68,7 @@ export function AiHologram() {
           color="#60a5fa"
           anchorX="center"
           anchorY="middle"
-          font="/fonts/Inter-Bold.ttf"
+          // font="/fonts/Inter-Bold.ttf"
         >
           SERVI-FI
         </Text>
@@ -78,7 +78,7 @@ export function AiHologram() {
           color="#60a5fa"
           anchorX="center"
           anchorY="middle"
-          font="/fonts/Inter-Bold.ttf"
+          // font="/fonts/Inter-Bold.ttf"
         >
           TECH
         </Text>
@@ -88,7 +88,7 @@ export function AiHologram() {
           color="#93c5fd"
           anchorX="center"
           anchorY="middle"
-          font="/fonts/Inter-Bold.ttf"
+          // font="/fonts/Inter-Bold.ttf"
         >
           AI SOLUTIONS
         </Text>
