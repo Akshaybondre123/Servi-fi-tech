@@ -21,7 +21,7 @@ export default function IntroOverlay() {
   const [showIntro, setShowIntro] = useState(true)
 
   useEffect(() => {
-    // After 10 seconds, hide the intro (changed from 3 seconds)
+    // After 10 seconds, hide the intro
     const timer = setTimeout(() => {
       setShowIntro(false)
     }, 10000)
@@ -38,11 +38,13 @@ export default function IntroOverlay() {
           transition={{ duration: 1 }}
           className="fixed inset-0 z-50 bg-black"
         >
-          <ErrorBoundary fallback={<FallbackHero />}>
-            <WebGLWrapper fallback={<FallbackHero />}>
-              <IntroCanvas />
-            </WebGLWrapper>
-          </ErrorBoundary>
+          <div className="w-full h-full">
+            <ErrorBoundary fallback={<FallbackHero />}>
+              <WebGLWrapper fallback={<FallbackHero />}>
+                <IntroCanvas />
+              </WebGLWrapper>
+            </ErrorBoundary>
+          </div>
 
           {/* Company name overlay */}
           <motion.div
@@ -52,10 +54,10 @@ export default function IntroOverlay() {
             transition={{ delay: 0.5, duration: 1 }}
             exit={{ opacity: 0 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-4 px-4 text-center">
               <span className="text-blue-500">SERVI-FI</span> TECH
             </h1>
-            <p className="text-xl md:text-2xl text-blue-300">AI SOLUTIONS</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-blue-300">AI SOLUTIONS</p>
           </motion.div>
         </motion.div>
       )}

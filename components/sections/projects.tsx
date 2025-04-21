@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
 import Image from "next/image"
@@ -17,7 +17,7 @@ const projects = [
       "Expert AI-driven recommendations that help users make informed decisions about health, finances, and relationships.",
     ],
     color: "blue",
-    image: "/projects/kailasa-ai.png",
+    // image: "/images/projects/kailasa-ai.png",
   },
   {
     title: "Insurance AI - Smart Training Solution",
@@ -41,7 +41,7 @@ const projects = [
       "Real-Time Data Access: The integrated database ensures Rotary International can access up-to-date information instantly, supporting faster decisions and better data management across operations.",
     ],
     color: "green",
-    image: "/projects/rotary-qr.png",
+    // image: "/images/projects/rotary-qr.png",
   },
   {
     title: "G2IT Venue Marketing Platform",
@@ -54,7 +54,7 @@ const projects = [
       "The platform provides real-time tracking, enabling clients to measure the effectiveness of campaigns and adjust strategies for better results.",
     ],
     color: "yellow",
-    image: "/projects/g2it-marketing.png",
+    // image: "/images/projects/g2it-marketing.png",
   },
   {
     title: "AI Agent Live Video Support",
@@ -66,25 +66,60 @@ const projects = [
       "Clients benefit from smooth, lag-free video interactions, ensuring consistent support and delivering an overall enhanced user experience.",
     ],
     color: "red",
-    // image: "/projects/ai-agent-video.png",
+    // image: "/images/projects/ai-agent-video.png",
   },
 ]
 
 export default function Projects() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
-  const [activeProject, setActiveProject] = useState(0)
+  const [activeProjects, setActiveProjects] = useState([0, 1])
+  const [autoplay, setAutoplay] = useState(true)
 
-  const nextProject = () => {
-    setActiveProject((prev) => (prev === projects.length - 1 ? 0 : prev + 1))
+  // Auto-rotate projects every 5 seconds
+  useEffect(() => {
+    if (!autoplay) return
+
+    const interval = setInterval(() => {
+      nextProjects()
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [activeProjects, autoplay])
+
+  // Pause autoplay when user interacts with navigation
+  const pauseAutoplay = () => {
+    setAutoplay(false)
+    // Resume autoplay after 10 seconds of inactivity
+    setTimeout(() => setAutoplay(true), 10000)
   }
 
-  const prevProject = () => {
-    setActiveProject((prev) => (prev === 0 ? projects.length - 1 : prev - 1))
+  const nextProjects = () => {
+    setActiveProjects((prev) => {
+      const next = [(prev[0] + 2) % projects.length, (prev[1] + 2) % projects.length]
+      return next
+    })
   }
 
-  const getColorClass = (color: string) => {
-    const colorMap: Record<string, { bg: string; light: string; border: string; text: string }> = {
+  const prevProjects = () => {
+    setActiveProjects((prev) => {
+      const next = [
+        (prev[0] - 2 + projects.length) % projects.length,
+        (prev[1] - 2 + projects.length) % projects.length,
+      ]
+      return next
+    })
+  }
+
+  const goToProjects = (index) => {
+    // Calculate the pair of projects to show
+    const secondIndex = (index + 1) % projects.length
+    setActiveProjects([index, secondIndex])
+    pauseAutoplay()
+  }
+
+  const getColorClass = (color) => {
+    const colorMap = {
       blue: {
         bg: "bg-blue-600",
         light: "bg-blue-500/20",
@@ -119,8 +154,6 @@ export default function Projects() {
     return colorMap[color] || colorMap.blue
   }
 
-  const colorClasses = getColorClass(projects[activeProject].color)
-
   return (
     <section id="projects" ref={ref} className="py-20 bg-gradient-to-b from-blue-950 to-black">
       <div className="container mx-auto px-4">
@@ -138,134 +171,111 @@ export default function Projects() {
         </motion.div>
 
         <div className="relative">
-          {/* Project Content with Image */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeProject}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 shadow-xl"
-            >
-              <div className="flex flex-col lg:flex-row">
-                {/* Image Section */}
-                <div className="lg:w-1/2 relative">
-                  {/* Background color strip at top */}
-                  <div className={`h-1 ${colorClasses.bg} w-full absolute top-0 left-0 z-10`}></div>
+          {/* Two projects side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {activeProjects.map((projectIndex, i) => {
+              const project = projects[projectIndex]
+              const colorClasses = getColorClass(project.color)
 
-                  <div className="relative h-64 md:h-80 lg:h-full overflow-hidden">
-                    <Image
-                      src={projects[activeProject].image || "/placeholder.svg"}
-                      alt={projects[activeProject].title}
-                      fill
-                      className="object-cover object-center transition-transform duration-700 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/80 via-gray-900/40 to-transparent"></div>
-
-                    {/* Project title overlay for mobile */}
-                    <div className="absolute bottom-0 left-0 p-6 lg:hidden">
-                      <h3 className="text-2xl font-bold text-white mb-2">{projects[activeProject].title}</h3>
-                      <p className="text-gray-300 text-sm md:text-base">{projects[activeProject].description}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Section */}
-                <div className="lg:w-1/2 p-6 lg:p-8">
-                  {/* Desktop title */}
-                  <div className="hidden lg:block mb-6">
-                    <h3 className="text-2xl font-bold text-white mb-2">{projects[activeProject].title}</h3>
-                    <p className="text-gray-300">{projects[activeProject].description}</p>
-                  </div>
-
-                  <div className="space-y-4 mt-4">
-                    {projects[activeProject].points.map((point, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="flex items-start"
-                      >
-                        <div className={`flex-shrink-0 w-4 h-4 rounded-full ${colorClasses.bg} mt-1.5`}></div>
-                        <p className="ml-3 text-gray-300">{point}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Call to action button */}
+              return (
+                <AnimatePresence mode="wait" key={`project-${projectIndex}`}>
                   <motion.div
-                    className="mt-8 flex justify-end"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 shadow-xl h-full"
                   >
-                    <button
-                      className={`px-6 py-2 rounded-full ${colorClasses.light} ${colorClasses.text} ${colorClasses.border} border flex items-center gap-2 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-${projects[activeProject].color}-500/20`}
-                    >
-                      View Case Study
-                      <ExternalLink size={16} />
-                    </button>
+                    {/* Background color strip at top */}
+                    <div className={`h-1 ${colorClasses.bg} w-full`}></div>
+
+                    {/* Project Image */}
+                    <div className="relative h-48 md:h-56 lg:h-64 overflow-hidden">
+                      <Image
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        fill
+                        className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-gray-900/80 via-gray-900/40 to-transparent"></div>
+                    </div>
+
+                    {/* Project Content */}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+                      <p className="text-gray-300 mb-4">{project.description}</p>
+
+                      {/* Key points - show only 2 for cleaner look */}
+                      <div className="space-y-3 mb-4">
+                        {project.points.slice(0, 2).map((point, index) => (
+                          <div key={index} className="flex items-start">
+                            <div className={`flex-shrink-0 w-3 h-3 rounded-full ${colorClasses.bg} mt-1.5`}></div>
+                            <p className="ml-3 text-gray-300 text-sm">{point}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Call to action button */}
+                      <div className="flex justify-end">
+                        <button
+                          className={`px-4 py-1.5 rounded-full ${colorClasses.light} ${colorClasses.text} ${colorClasses.border} border flex items-center gap-2 transition-all hover:-translate-y-1 text-sm`}
+                        >
+                          View Details
+                          <ExternalLink size={14} />
+                        </button>
+                      </div>
+                    </div>
                   </motion.div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                </AnimatePresence>
+              )
+            })}
+          </div>
 
           {/* Navigation Controls */}
           <div className="flex justify-between items-center mt-8">
             <button
-              onClick={prevProject}
+              onClick={() => {
+                prevProjects()
+                pauseAutoplay()
+              }}
               className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 text-white transition-colors"
-              aria-label="Previous project"
+              aria-label="Previous projects"
             >
               <ChevronLeft size={24} />
             </button>
 
+            {/* Pagination Dots */}
             <div className="flex space-x-3 items-center">
-              {projects.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveProject(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === activeProject ? getColorClass(projects[index].color).bg : "bg-gray-600"
-                  }`}
-                  aria-label={`Go to project ${index + 1}`}
-                ></button>
-              ))}
+              {Array.from({ length: Math.ceil(projects.length / 2) }).map((_, index) => {
+                // Calculate if this dot represents the current active projects
+                const isActive =
+                  activeProjects.includes(index * 2) ||
+                  (index * 2 + 1 < projects.length && activeProjects.includes(index * 2 + 1))
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => goToProjects(index * 2)}
+                    className={`w-3 h-3 rounded-full transition-colors ${
+                      isActive ? "bg-blue-500" : "bg-gray-600 hover:bg-gray-500"
+                    }`}
+                    aria-label={`Go to projects ${index + 1}`}
+                  ></button>
+                )
+              })}
             </div>
 
             <button
-              onClick={nextProject}
+              onClick={() => {
+                nextProjects()
+                pauseAutoplay()
+              }}
               className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 text-white transition-colors"
-              aria-label="Next project"
+              aria-label="Next projects"
             >
               <ChevronRight size={24} />
             </button>
-          </div>
-
-          {/* Project title links */}
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            {projects.map((project, index) => {
-              const colors = getColorClass(project.color)
-              return (
-                <button
-                  key={index}
-                  onClick={() => setActiveProject(index)}
-                  className={`px-4 py-2 rounded-md transition-all ${
-                    index === activeProject
-                      ? `${colors.bg} text-white shadow-lg`
-                      : `bg-gray-800 text-gray-300 hover:${colors.text} hover:bg-gray-700`
-                  }`}
-                >
-                  {project.title.split(" - ")[0]}
-                </button>
-              )
-            })}
           </div>
         </div>
       </div>

@@ -207,9 +207,18 @@ function FloatingParticles() {
   )
 }
 
+// Update the camera settings to be more responsive on mobile
 export default function IntroCanvas() {
   return (
-    <Canvas camera={{ position: [0, 0, 12], fov: 45 }} className="w-full h-screen">
+    <Canvas
+      camera={{
+        position: [0, 0, 15], // Increased z position to show more of the scene on small screens
+        fov: 60, // Wider field of view for mobile
+        near: 0.1,
+        far: 50,
+      }}
+      className="w-full h-full"
+    >
       <ambientLight intensity={0.4} />
       <pointLight position={[10, 10, 10]} intensity={0.6} />
       <spotLight position={[0, 5, 5]} angle={0.3} penumbra={1} intensity={0.8} castShadow />
