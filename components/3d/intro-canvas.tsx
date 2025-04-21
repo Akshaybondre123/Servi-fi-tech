@@ -1,38 +1,24 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Environment } from "@react-three/drei"
-import { AiHologram } from "@/components/3d/ai-hologram"
 import * as THREE from "three"
 
-// Update the AiBrain component to include the entrance animation
-function AiBrain() {
+function AiBrainIntro() {
   const group = useRef<THREE.Group>(null)
   const neuronRefs = useRef<THREE.Mesh[]>([])
   const pathRefs = useRef<THREE.Mesh[]>([])
-  const [centered, setCentered] = useState(true)
-
-  // Add useEffect for the delayed position change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCentered(false)
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [])
 
   // Create a more structured brain model with better animations
   useFrame((state) => {
     if (group.current) {
       // Smoother rotation
-      group.current.rotation.y =
-        Math.sin(state.clock.getElapsedTime() * 0.2) * 0.1 + state.clock.getElapsedTime() * 0.05
+      group.current.rotation.y = state.clock.getElapsedTime() * 0.1
+      group.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.2) * 0.1
 
-      // Gentle floating motion - only apply if not centered
-      if (!centered) {
-        group.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2
-      }
+      // Gentle floating motion
+      group.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2
 
       // Animate neurons
       neuronRefs.current.forEach((neuron, i) => {
@@ -48,11 +34,11 @@ function AiBrain() {
   })
 
   // Create neural network structure with improved organization
-  const neurons = Array.from({ length: 30 }, (_, i) => {
+  const neurons = Array.from({ length: 50 }, (_, i) => {
     // Create spherical distribution for neurons
-    const phi = Math.acos(-1 + (2 * i) / 30)
-    const theta = Math.sqrt(30 * Math.PI) * phi
-    const radius = 2.2
+    const phi = Math.acos(-1 + (2 * i) / 50)
+    const theta = Math.sqrt(50 * Math.PI) * phi
+    const radius = 3.5
 
     return {
       position: [
@@ -67,7 +53,7 @@ function AiBrain() {
   // Create connections between neurons
   const createConnections = () => {
     const connections = []
-    const connectionCount = 25
+    const connectionCount = 40
 
     for (let i = 0; i < connectionCount; i++) {
       const startIdx = Math.floor(Math.random() * neurons.length)
@@ -98,15 +84,11 @@ function AiBrain() {
 
   const connections = createConnections()
 
-  // Calculate position based on centered state
-  const position = centered ? [0, 0, 0] : [-3, 0, 0]
-  const scale = centered ? 1.2 : 1
-
   return (
-    <group ref={group}>
+    <group ref={group} scale={1.5}>
       {/* Central core - brain structure */}
       <mesh castShadow>
-        <sphereGeometry args={[1.8, 64, 64]} />
+        <sphereGeometry args={[2.5, 64, 64]} />
         <meshStandardMaterial
           color="#3b82f6"
           emissive="#1d4ed8"
@@ -120,13 +102,13 @@ function AiBrain() {
 
       {/* Inner glow */}
       <mesh>
-        <sphereGeometry args={[1.6, 32, 32]} />
+        <sphereGeometry args={[2.3, 32, 32]} />
         <meshStandardMaterial color="#60a5fa" emissive="#60a5fa" emissiveIntensity={0.6} transparent opacity={0.3} />
       </mesh>
 
       {/* Circuit pattern */}
       <mesh>
-        <sphereGeometry args={[1.85, 32, 32]} />
+        <sphereGeometry args={[2.6, 32, 32]} />
         <meshStandardMaterial color="#1d4ed8" wireframe transparent opacity={0.4} />
       </mesh>
 
@@ -158,10 +140,10 @@ function AiBrain() {
       ))}
 
       {/* Light points */}
-      {[...Array(8)].map((_, i) => {
+      {[...Array(12)].map((_, i) => {
         const theta = Math.random() * Math.PI * 2
         const phi = Math.random() * Math.PI
-        const r = 1.8
+        const r = 2.5
 
         return (
           <pointLight
@@ -177,16 +159,63 @@ function AiBrain() {
   )
 }
 
-// Update the HeroCanvas component
-export default function HeroCanvas() {
+// Create particles floating around the brain
+function FloatingParticles() {
+  const particlesRef = useRef<THREE.Points>(null)
+
+  useFrame((state) => {
+    if (particlesRef.current) {
+      particlesRef.current.rotation.y = state.clock.getElapsedTime() * 0.05
+    }
+  })
+
+  // Create particles
+  const particleCount = 1000
+  const positions = new Float32Array(particleCount * 3)
+  const colors = new Float32Array(particleCount * 3)
+  const sizes = new Float32Array(particleCount)
+
+  for (let i = 0; i < particleCount; i++) {
+    // Position particles in a spherical shape
+    const radius = 5 + Math.random() * 10
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.acos(Math.random() * 2 - 1)
+
+    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    positions[i * 3 + 2] = radius * Math.cos(phi)
+
+    // Blue color gradient
+    const blueShade = Math.random() * 0.4 + 0.6
+    colors[i * 3] = 0.1 * blueShade
+    colors[i * 3 + 1] = 0.4 * blueShade
+    colors[i * 3 + 2] = 1.0 * blueShade
+
+    // Random size for each particle
+    sizes[i] = Math.random() * 0.1 + 0.03
+  }
+
   return (
-    <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+    <points ref={particlesRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" count={particleCount} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-color" count={particleCount} array={colors} itemSize={3} />
+        <bufferAttribute attach="attributes-size" count={particleCount} array={sizes} itemSize={1} />
+      </bufferGeometry>
+      <pointsMaterial size={0.1} sizeAttenuation vertexColors alphaTest={0.001} transparent depthWrite={false} />
+    </points>
+  )
+}
+
+export default function IntroCanvas() {
+  return (
+    <Canvas camera={{ position: [0, 0, 12], fov: 45 }} className="w-full h-screen">
       <ambientLight intensity={0.4} />
       <pointLight position={[10, 10, 10]} intensity={0.6} />
       <spotLight position={[0, 5, 5]} angle={0.3} penumbra={1} intensity={0.8} castShadow />
 
-      <AiBrain />
-      <AiHologram />
+      <AiBrainIntro />
+      <FloatingParticles />
 
       <Environment preset="city" />
       <OrbitControls
@@ -194,14 +223,12 @@ export default function HeroCanvas() {
         autoRotate
         autoRotateSpeed={0.3}
         enablePan={false}
-        minPolarAngle={Math.PI / 3}
-        maxPolarAngle={Math.PI / 1.5}
         enableDamping={true}
         dampingFactor={0.05}
       />
 
       {/* Add subtle fog for depth */}
-      <fog attach="fog" args={["#000", 7, 20]} />
+      <fog attach="fog" args={["#000", 10, 30]} />
     </Canvas>
   )
 }
