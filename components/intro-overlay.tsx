@@ -18,15 +18,26 @@ const IntroCanvas = dynamic(() => import("@/components/3d/intro-canvas"), {
 })
 
 export default function IntroOverlay() {
-  const [showIntro, setShowIntro] = useState(true)
+  const [showIntro, setShowIntro] = useState(false)
 
   useEffect(() => {
-    // After 10 seconds, hide the intro
-    const timer = setTimeout(() => {
-      setShowIntro(false)
-    }, 10000)
+    // Check if this is the first visit in this session
+    const hasSeenIntro = sessionStorage.getItem("hasSeenIntro")
 
-    return () => clearTimeout(timer)
+    if (!hasSeenIntro) {
+      // First visit, show the intro
+      setShowIntro(true)
+
+      // Set the flag in session storage
+      sessionStorage.setItem("hasSeenIntro", "true")
+
+      // Hide the intro after 10 seconds
+      const timer = setTimeout(() => {
+        setShowIntro(false)
+      }, 10000)
+
+      return () => clearTimeout(timer)
+    }
   }, [])
 
   return (

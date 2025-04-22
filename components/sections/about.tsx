@@ -77,7 +77,7 @@ export default function About() {
             >
               <div className="relative h-[300px] md:h-[400px] w-full overflow-hidden rounded-xl">
                 <Image
-                  src="/placeholder.svg?height=800&width=1200"
+                  src="/AI_Drive.png"
                   alt="SERVI-FI TECH Team"
                   fill
                   className="object-cover"
