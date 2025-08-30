@@ -54,7 +54,7 @@ export default function Contact() {
     {
       icon: MapPin,
       title: "Address",
-      details: "C-25, Sawai Jai Singh Hwy, Sen Colony, Bani Park, Jaipur, Rajasthan 302016",
+      details: "FLAT NO-603, UPASANA RESIDENCY, JAIPUR, SEN COLONY, BANIPARK, RAJASTHAN, JAIPUR ,Pin 302001",
     },
     {
       icon: Phone,
