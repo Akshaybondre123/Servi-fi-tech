@@ -16,7 +16,7 @@ export default function Footer() {
   }
 
   // Get current year safely
-  const currentYear = typeof Date !== "undefined" ? new Date().getFullYear() : 2023
+  const currentYear = typeof Date !== "undefined" ? new Date().getFullYear() : 2025
 
   return (
     <footer className="bg-black text-white py-12 border-t border-gray-800">
@@ -74,14 +74,15 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             className="text-gray-400 text-sm mb-4 md:mb-0"
           >
-            © {currentYear} SERVI-FI TECH. All rights reserved.
-          </motion.p>
+            <p>Copyright © {currentYear} SERVI-FI TECH. All rights reserved.</p>
+            <p className="mt-1">FLAT NO-603, UPASANA RESIDENCY, JAIPUR, SEN COLONY, BANIPARK, RAJASTHAN, JAIPUR, Pin 302001</p>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
