@@ -1,20 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import dynamic from "next/dynamic"
-import WebGLWrapper from "@/components/3d/webgl-check"
-import ErrorBoundary from "@/components/3d/error-boundary"
-import FallbackHero from "@/components/3d/fallback-hero"
-
-// Dynamically import the 3D components with no SSR
-const HeroCanvas = dynamic(() => import("@/components/3d/hero-canvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[400px] md:h-[500px] bg-blue-900/20 rounded-lg flex items-center justify-center">
-      <div className="text-blue-500 text-lg">Loading 3D Scene...</div>
-    </div>
-  ),
-})
 
 export default function Hero() {
   // Animation variants for smoother transitions
@@ -47,8 +33,8 @@ export default function Hero() {
     },
   }
 
-  const canvasVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+  const partnerVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
       scale: 1,
@@ -56,7 +42,8 @@ export default function Hero() {
         type: "spring",
         stiffness: 100,
         damping: 15,
-        duration: 1,
+        duration: 0.8,
+        delay: 0.3,
       },
     },
   }
@@ -87,67 +74,117 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 z-10 flex flex-col lg:flex-row items-center">
-        <div className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+      <div className="container mx-auto px-4 z-10 flex flex-col items-center">
+        <div className="w-full text-center mb-8">
           <motion.h1
             variants={textVariants}
             initial="hidden"
             animate="visible"
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4"
           >
             <span className="text-blue-500">SERVI-FI TECH:</span>
             <br />
             AI SOLUTIONS
           </motion.h1>
+          
           <motion.p
             variants={textVariants}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0"
+            className="text-lg md:text-xl text-gray-300 mb-8 max-w-4xl mx-auto"
           >
             At SERVI-FI TECH, we pioneer cutting-edge digital solutions, specializing in AI agents, chatbots, and
             web/mobile app development. Our advanced AI technologies power real-time communication, automation, and data
             insights, empowering businesses to optimize operations, enhance customer experiences, and drive innovation.
           </motion.p>
-          <motion.div
-            variants={buttonVariants}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4"
-          >
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.05, backgroundColor: "#1d4ed8" }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors duration-300 text-center"
-            >
-              Get Started
-            </motion.a>
-            <motion.a
-              href="#services"
-              whileHover={{ scale: 1.05, backgroundColor: "#3b82f6", color: "#ffffff" }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="px-8 py-3 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-medium rounded-md transition-colors duration-300 text-center"
-            >
-              Our Services
-            </motion.a>
-          </motion.div>
         </div>
 
+        {/* Partner Section - More attractive and properly positioned */}
         <motion.div
-          variants={canvasVariants}
+          variants={partnerVariants}
           initial="hidden"
           animate="visible"
-          className="lg:w-1/2 h-[400px] md:h-[500px]"
+          className="w-full max-w-2xl mb-10 bg-gradient-to-r from-blue-900/40 to-purple-900/40 backdrop-blur-md rounded-2xl p-6 border border-blue-500/30 shadow-2xl shadow-blue-500/20 relative overflow-hidden"
         >
-          <ErrorBoundary fallback={<FallbackHero />}>
-            <WebGLWrapper fallback={<FallbackHero />}>
-              <HeroCanvas />
-            </WebGLWrapper>
-          </ErrorBoundary>
+          <div className="absolute -top-10 -right-10 w-28 h-28 bg-blue-500/10 rounded-full blur-xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"></div>
+          
+          <div className="relative z-10 text-center">
+            <p className="text-blue-300 text-sm font-semibold mb-2 uppercase tracking-wider">In Partnership With</p>
+            <a 
+              href="https://www.zanzarrotary.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-300 hover:to-purple-300 transition-all duration-500 mb-3"
+            >
+              ZANZAR ROTARY
+            </a>
+            <p className="text-gray-300 text-md mt-3 max-w-lg mx-auto">
+              Bringing together industry expertise and innovative AI solutions to transform businesses and drive growth.
+            </p>
+            <div className="mt-4 flex justify-center">
+              <span className="inline-flex items-center text-blue-400 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Official Technology Partner
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={buttonVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12"
+        >
+          <motion.a
+            href="#contact"
+            whileHover={{ scale: 1.05, backgroundColor: "#1d4ed8" }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors duration-300 text-center"
+          >
+            Get Started
+          </motion.a>
+          <motion.a
+            href="#services"
+            whileHover={{ scale: 1.05, backgroundColor: "#3b82f6", color: "#ffffff" }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            className="px-8 py-3 bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-medium rounded-md transition-colors duration-300 text-center"
+          >
+            Our Services
+          </motion.a>
+        </motion.div>
+
+        {/* Feature cards section */}
+        <motion.div
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+        >
+          <div className="bg-gray-800/40 backdrop-blur-sm p-6 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+            <div className="text-blue-500 text-3xl mb-4">🤖</div>
+            <h3 className="text-xl font-semibold text-white mb-2">AI Solutions</h3>
+            <p className="text-gray-300">Intelligent automation and machine learning solutions tailored to your business needs.</p>
+          </div>
+          
+          <div className="bg-gray-800/40 backdrop-blur-sm p-6 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+            <div className="text-blue-500 text-3xl mb-4">💬</div>
+            <h3 className="text-xl font-semibold text-white mb-2">Chatbots</h3>
+            <p className="text-gray-300">Advanced conversational AI that enhances customer engagement and support.</p>
+          </div>
+          
+          <div className="bg-gray-800/40 backdrop-blur-sm p-6 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+            <div className="text-blue-500 text-3xl mb-4">🌐</div>
+            <h3 className="text-xl font-semibold text-white mb-2">Web & Mobile</h3>
+            <p className="text-gray-300">Responsive, high-performance applications built with cutting-edge technologies.</p>
+          </div>
         </motion.div>
       </div>
 

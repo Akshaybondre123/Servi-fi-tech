@@ -186,6 +186,18 @@ export function BuyNowPage() {
           <h1 className="text-2xl font-bold mb-2">Buy Now</h1>
           <p className="text-gray-400 mb-6">Enter your mobile number to proceed with your purchase</p>
           
+          <div className="mb-6 p-4 bg-blue-900/20 rounded-lg border border-blue-700/30 text-center">
+            <p className="text-sm text-gray-300 mb-2">This service is provided on behalf of</p>
+            <a 
+              href="https://www.zanzarrotary.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              ZANZAR ROTARY
+            </a>
+          </div>
+          
           <form onSubmit={handleGetOtp}>
             <div className="mb-6">
               <label htmlFor="mobile" className="block text-sm font-medium mb-2">
