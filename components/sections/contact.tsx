@@ -4,20 +4,6 @@ import type React from "react"
 import { useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
 import { MapPin, Phone, Mail } from "lucide-react"
-import dynamic from "next/dynamic"
-import WebGLWrapper from "@/components/3d/webgl-check"
-import ErrorBoundary from "@/components/3d/error-boundary"
-import FallbackContact from "@/components/3d/fallback-contact"
-
-// Dynamically import the 3D components with no SSR
-const ContactCanvas = dynamic(() => import("@/components/3d/contact-canvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[300px] bg-blue-900/20 rounded-lg flex items-center justify-center">
-      <div className="text-blue-500 text-lg">Loading 3D Scene...</div>
-    </div>
-  ),
-})
 
 export default function Contact() {
   const ref = useRef(null)
@@ -25,6 +11,9 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
+    company: "",
+    subject: "",
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -39,15 +28,33 @@ export default function Contact() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setFormData({ name: "", email: "", message: "" })
+      const result = await response.json()
 
-    // Reset submission status after 3 seconds
-    setTimeout(() => setIsSubmitted(false), 3000)
+      if (result.success) {
+        setIsSubmitted(true)
+        setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" })
+        
+        // Reset submission status after 5 seconds
+        setTimeout(() => setIsSubmitted(false), 5000)
+      } else {
+        // Handle validation errors or other issues
+        alert(result.message || 'Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      alert('Network error. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const contactInfo = [
@@ -122,6 +129,59 @@ export default function Contact() {
                   placeholder="Your Email"
                 />
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">
+                    Phone (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                    placeholder="Your Phone Number"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-1">
+                    Company (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                    placeholder="Your Company"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1">
+                  Subject
+                </label>
+                <select
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                >
+                  <option value="">Select a subject</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile App Development">Mobile App Development</option>
+                  <option value="AI Agent Development">AI Agent Development</option>
+                  <option value="Chatbot Solutions">Chatbot Solutions</option>
+                  <option value="NFC & RFID Integration">NFC & RFID Integration</option>
+                  <option value="Data Insights & Analytics">Data Insights & Analytics</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Partnership">Partnership</option>
+                  <option value="Support">Support</option>
+                </select>
+              </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
                   Message
@@ -159,12 +219,114 @@ export default function Contact() {
             transition={{ duration: 0.8 }}
             className="lg:w-1/2"
           >
-            <div className="h-[300px] mb-8">
-              <ErrorBoundary fallback={<FallbackContact />}>
-                <WebGLWrapper fallback={<FallbackContact />}>
-                  <ContactCanvas />
-                </WebGLWrapper>
-              </ErrorBoundary>
+            {/* Contact Visual */}
+            <div className="h-[300px] mb-8 bg-gradient-to-br from-blue-900/40 to-purple-900/40 rounded-xl border border-blue-500/20 overflow-hidden relative">
+              {/* Animated background */}
+              <div className="absolute inset-0">
+                {/* Floating dots */}
+                {Array.from({ length: 30 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-blue-400/60 rounded-full"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                    }}
+                    animate={{
+                      y: [0, -10, 0],
+                      opacity: [0.3, 1, 0.3],
+                      scale: [0.5, 1, 0.5]
+                    }}
+                    transition={{
+                      duration: 3 + Math.random() * 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: Math.random() * 2
+                    }}
+                  />
+                ))}
+                
+                {/* Network connections */}
+                <svg className="absolute inset-0 w-full h-full opacity-30">
+                  {Array.from({ length: 8 }).map((_, i) => {
+                    const x1 = Math.random() * 100;
+                    const y1 = Math.random() * 100;
+                    const x2 = Math.random() * 100;
+                    const y2 = Math.random() * 100;
+                    return (
+                      <motion.line
+                        key={i}
+                        x1={`${x1}%`}
+                        y1={`${y1}%`}
+                        x2={`${x2}%`}
+                        y2={`${y2}%`}
+                        stroke="#60a5fa"
+                        strokeWidth="1"
+                        animate={{
+                          opacity: [0.2, 0.6, 0.2]
+                        }}
+                        transition={{
+                          duration: 2 + Math.random() * 2,
+                          repeat: Infinity,
+                          delay: i * 0.3
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
+              
+              {/* Center content */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-400/30"
+                >
+                  <motion.div
+                    animate={{
+                      rotate: 360
+                    }}
+                    transition={{
+                      duration: 20,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                    className="w-12 h-12 border-2 border-blue-400 border-t-transparent rounded-full"
+                  />
+                </motion.div>
+                
+                <h3 className="text-xl font-bold text-white mb-2">Let's Connect</h3>
+                <p className="text-blue-200 text-sm max-w-xs">
+                  Ready to transform your business with AI? We're here to help!
+                </p>
+                
+                <motion.div
+                  className="flex space-x-2 mt-4"
+                  animate={{
+                    y: [0, -5, 0]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <div className="w-2 h-2 bg-blue-400 rounded-full" />
+                  <div className="w-2 h-2 bg-purple-400 rounded-full" />
+                  <div className="w-2 h-2 bg-blue-400 rounded-full" />
+                </motion.div>
+              </div>
+              
+              {/* Corner decorations */}
+              <div className="absolute top-4 right-4 w-8 h-8 border-2 border-blue-400/30 border-b-transparent border-l-transparent transform rotate-45" />
+              <div className="absolute bottom-4 left-4 w-6 h-6 border-2 border-purple-400/30 border-t-transparent border-r-transparent transform rotate-45" />
             </div>
 
             <h3 className="text-xl font-semibold text-white mb-6">Contact Info</h3>

@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  subject   String?
+  message   String
+  status    String   @default("NEW")
+  source    String   @default("website")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contacts")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  company   String
+  position  String?
+  rating    Int      @default(5)
+  content   String
+  image     String?
+  featured  Boolean  @default(false)
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model CaseStudy {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String
+  image       String?
+  gallery     String?  // JSON string of image URLs
+  client      String
+  industry    String
+  technologies String?  // JSON string of tech stack
+  projectUrl  String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("case_studies")
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String
+  image       String?
+  author      String   @default("Servifitech Team")
+  tags        String?  // JSON string of tags
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_posts")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?
+  icon        String   // Icon name or URL
+  color       String   // Tailwind color class
+  features    String?  // JSON string of features
+  price       String?
+  duration    String?
+  active      Boolean  @default(true)
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  event     String   // page_view, form_submit, contact_click, etc.
+  path      String?  // page path
+  data      String?  // JSON data
+  userAgent String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@map("analytics")
+}
+
+// ContactStatus values: "NEW", "IN_PROGRESS", "COMPLETED", "CLOSED"

@@ -4,6 +4,7 @@ import About from "@/components/sections/about"
 import Services from "@/components/sections/services"
 import Projects from "@/components/sections/projects"
 import Clients from "@/components/sections/clients"
+import DownloadOptions from "@/components/sections/download-options"
 import IndustriesCarousel from "@/components/sections/industries-carouse."
 import Contact from "@/components/sections/contact"
 import Navigation from "@/components/navigation"
@@ -22,6 +23,7 @@ export default function Home() {
       <Services />
       <Projects />
       <Clients />
+      <DownloadOptions />
       <IndustriesCarousel />
       <Contact />
       <Footer />

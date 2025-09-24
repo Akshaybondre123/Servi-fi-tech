@@ -102,6 +102,9 @@ export default function Footer() {
             <Link href="#projects" className="text-gray-400 hover:text-blue-500 transition-colors text-sm">
               Projects
             </Link>
+            <Link href="#testimonials" className="text-gray-400 hover:text-blue-500 transition-colors text-sm">
+              Testimonials
+            </Link>
             <Link href="#clients" className="text-gray-400 hover:text-blue-500 transition-colors text-sm">
               Clients
             </Link>

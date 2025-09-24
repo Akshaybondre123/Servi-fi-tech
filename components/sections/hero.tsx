@@ -53,24 +53,98 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-blue-950 to-black overflow-hidden pt-20"
     >
-      {/* Animated particles background */}
+      {/* Enhanced animated background */}
       <div className="absolute inset-0 z-0">
+        {/* Base overlay */}
         <div className="absolute inset-0 bg-black opacity-70"></div>
+        
+        {/* Floating particles */}
         <div className="absolute inset-0">
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div
+          {Array.from({ length: 80 }).map((_, i) => (
+            <motion.div
               key={i}
-              className="absolute rounded-full bg-blue-500 opacity-20"
+              className="absolute rounded-full bg-blue-400"
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                width: `${Math.random() * 10 + 2}px`,
-                height: `${Math.random() * 10 + 2}px`,
-                animation: `float ${Math.random() * 10 + 10}s linear infinite`,
-                animationDelay: `${Math.random() * 10}s`,
+                width: `${Math.random() * 6 + 2}px`,
+                height: `${Math.random() * 6 + 2}px`,
               }}
-            ></div>
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.2, 0.8, 0.2],
+                scale: [0.5, 1.2, 0.5]
+              }}
+              transition={{
+                duration: 4 + Math.random() * 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: Math.random() * 3
+              }}
+            />
           ))}
+        </div>
+        
+        {/* Gradient orbs */}
+        <motion.div
+          className="absolute top-20 left-20 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div
+          className="absolute bottom-20 right-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.4, 0.8, 0.4],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        
+        <motion.div
+          className="absolute top-1/3 right-1/3 w-48 h-48 bg-blue-400/15 rounded-full blur-2xl"
+          animate={{
+            scale: [1, 1.5, 1],
+            opacity: [0.2, 0.7, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4
+          }}
+        />
+        
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="grid grid-cols-12 gap-4 h-full">
+            {Array.from({ length: 144 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="border border-blue-400/30"
+                animate={{
+                  opacity: [0, 0.3, 0]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: i * 0.05
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

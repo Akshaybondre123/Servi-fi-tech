@@ -39,7 +39,7 @@ export default function Projects() {
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
-    <section id="projects" ref={ref} className="py-20 bg-gradient-to-b from-blue-950 to-black">
+    <section id="projects" ref={ref} className="py-12 bg-gradient-to-b from-blue-950 to-black">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
