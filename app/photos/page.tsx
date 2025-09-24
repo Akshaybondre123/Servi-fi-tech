@@ -5,6 +5,7 @@ import { Smartphone, Globe, Sparkles, Download, Star, Camera, Mail, Phone } from
 import Link from "next/link"
 import Navigation from "@/components/navigation"
 import DownloadOptions from "@/components/sections/download-options"
+import Image from 'next/image'
 
 export default function PhotosPage() {
   return (
@@ -51,14 +52,18 @@ export default function PhotosPage() {
               </motion.div>
 
               {/* Main Heading */}
-              <motion.h1
+              <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
+                className="flex items-center justify-center gap-6 mb-6"
               >
-                Join the <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">SERVIFITECH</span> Community
-              </motion.h1>
+               
+
+                <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight"> Get
+                  Garba Photos <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">by SERVIFITECH</span>
+                </h1>
+              </motion.div>
               
               {/* Subtitle */}
               <motion.p
@@ -67,7 +72,7 @@ export default function PhotosPage() {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed"
               >
-                Share your moments, connect with photographers, and discover amazing content worldwide
+                Experience the magic of Garba through our professionally captured moments
               </motion.p>
 
               {/* Buttons Container */}
@@ -88,7 +93,7 @@ export default function PhotosPage() {
                 >
                   <div className="flex items-center justify-center gap-2">
                     <Smartphone className="w-5 h-5" />
-                    <span>Join via Mobile App</span>
+                    <span>For Mobile App</span>
                     
                   </div>
                   <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-md"></div>
@@ -105,7 +110,7 @@ export default function PhotosPage() {
                 >
                   <div className="flex items-center justify-center gap-2">
                     <Globe className="w-5 h-5" />
-                    <span>Join via Website</span>
+                    <span>For Website</span>
                   </div>
                 </motion.a>
               </motion.div>
